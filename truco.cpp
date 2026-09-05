@@ -12,11 +12,11 @@ using namespace std;
 // ~mostrarCarta()~
 
 // Você
-// definirForcaCarta(check)
-// compararCartas(check)
-// jogarRodada()
-// verificarVencedorMao()
-// pedirTruco()
+// definirForcaCarta(✓)
+// compararCartas(✓)
+// jogarRodada(✓)
+// verificarVencedorMao(✓)
+// pedirTruco(✓)
 // aumentarTruco()
 // atualizarPontuacao()
 // verificarFimJogo()
@@ -31,7 +31,8 @@ const char *NAIPES[4] = {
     "♦",
     "♠",
     "♥",
-    "♣"};
+    "♣"
+};
 const char VALORES[13] = "456789QJKA23";
 
 struct Carta
@@ -100,6 +101,67 @@ int compararCartas(Carta carta1, Carta carta2, Carta coringa)
     }
 }
 
+int verificarVencedorMao(int rodada1, int rodada2, int rodada3)
+{
+    int vitoriasJogador1 = 0;
+    int vitoriasJogador2 = 0;
+
+    if (rodada1 == 1)
+        vitoriasJogador1++;
+    else if (rodada1 == 2)
+        vitoriasJogador2++;
+
+    if (rodada2 == 1)
+        vitoriasJogador1++;
+    else if (rodada2 == 2)
+        vitoriasJogador2++;
+
+    if (rodada3 == 1)
+        vitoriasJogador1++;
+    else if (rodada3 == 2)
+        vitoriasJogador2++;
+
+    if (vitoriasJogador1 > vitoriasJogador2)
+        return 1; // Jogador 1 venceu a mão
+    else if (vitoriasJogador2 > vitoriasJogador1)
+        return 2; // Jogador 2 venceu a mão
+    if(rodada3 == 1)
+        vitoriasJogador1++;
+    else if(rodada3 == 2)
+        vitoriasJogador2++;
+
+        if(vitoriasJogador1 >= 2)
+            return 1;
+
+        if(vitoriasJogador2 >= 2)
+            return 2;
+
+            return 0; // Empata
+}
+
+int pedirTruco(int valorMao)
+{
+    char resposta;
+
+    cout << "Truco!" << endl;
+    cout << "Deseja pedir truco? (s/n): ";
+    cin >> resposta;
+
+    if (resposta == 's' || resposta == 'S')
+    {
+        return 3; // Jogador pediu truco
+    }
+    else
+    {
+        return valorMao; // Jogador não pediu truco
+    }
+}
+
+
+
+
+
+
 // O = 1
 // E = 2
 // C = 3
@@ -118,22 +180,26 @@ int compararCartas(Carta carta1, Carta carta2, Carta coringa)
 // 2 = 10
 // 3 = 11
 
-int main()
+   int jogarRodada(Carta carta1, Carta carta2, Carta coringa)
 {
-    SetConsoleOutputCP(CP_UTF8);
+    cout << "Carta do Jogador 1: " << mostrarCarta(carta1) << endl;
+    cout << "Carta do Jogador 2: " << mostrarCarta(carta2) << endl;
 
-    Carta coringa;
-    coringa.valor = 3;
-    coringa.naipe = 0;
+    int vencedor = compararCartas(carta1, carta2, coringa);
 
-    Carta carta;
-    carta.valor =4;
-    carta.naipe = 1;
+    if(vencedor == 1)
+    {
+        cout << "Jogador 1 venceu a rodada!" << endl;
+    }
+    else if(vencedor == 2)
+    {
+        cout << "Jogador 2 venceu a rodada!" << endl;
+    }
+    else
+    {
+        cout << "Empate na rodada!" << endl;
+};
 
-    cout << "Coringa: " << mostrarCarta(coringa) << endl;
-    cout << "Carta: " << mostrarCarta(carta) << endl;
-
-    cout << "Força da carta: " << definirForcaCarta(carta, coringa) << endl;
 
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <windows.h>
 using namespace std;
 
@@ -74,31 +75,17 @@ int definirForcaCarta(Carta carta, Carta coringa)
 
 int compararCartas(Carta carta1, Carta carta2, Carta coringa)
 {
+    // descartei o caso das cartas terem naipes iguais, no criar baralho não pode ter
     int forcaCarta1 = definirForcaCarta(carta1, coringa);
     int forcaCarta2 = definirForcaCarta(carta2, coringa);
 
-    if (forcaCarta1 > forcaCarta2)
+    if (forcaCarta1 != forcaCarta2)
     {
-        return 1; // carta1 é mais forte
+        return forcaCarta1 > forcaCarta2 ? 1 : 2;
     }
-    else if (forcaCarta1 < forcaCarta2)
+    else if (carta1.naipe != carta2.naipe)
     {
-        return 2; // carta2 é mais forte
-    }
-    else
-    {
-        if (carta1.naipe > carta2.naipe)
-        {
-            return 1; // carta1 é mais forte
-        }
-        else if (carta1.naipe < carta2.naipe)
-        {
-            return 2; // carta2 é mais forte
-        }
-        else
-        {
-            return 0; // empate
-        }
+        return carta1.naipe > carta2.naipe ? 1 : 2;
     }
 }
 

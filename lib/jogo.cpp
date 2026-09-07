@@ -115,3 +115,21 @@ int jogarRodada(Carta carta1, Carta carta2, Carta coringa)
 
     return 0;
 }
+
+// cria e inicializa os dois jogadores, deixando as mãos vazias
+std::array<Jogador, 2> setarJogadores()
+{
+    std::array<Jogador, 2> jogadores{};
+
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            // -1 indica que a carta ainda não foi distribuída
+            jogadores[i].mao[j].valor = -1;
+            jogadores[i].mao[j].naipe = -1;
+        }
+    }
+
+    return jogadores;
+}

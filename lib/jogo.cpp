@@ -20,7 +20,7 @@ int definirForcaCarta(Carta carta, Carta coringa)
 
 int compararCartas(Carta carta1, Carta carta2, Carta coringa)
 {
-    // descartei o caso das cartas terem naipes iguais, no criar baralho não pode ter
+    // Primeiro compara a força; se for igual, compara o naipe.
     int forcaCarta1 = definirForcaCarta(carta1, coringa);
     int forcaCarta2 = definirForcaCarta(carta2, coringa);
 
@@ -32,6 +32,8 @@ int compararCartas(Carta carta1, Carta carta2, Carta coringa)
     {
         return carta1.naipe > carta2.naipe ? 1 : 2;
     }
+
+    return 0; // Mesma força e mesmo naipe: empate.
 }
 
 // Gui: Acho que essa função não vai ser usada, não acho bom as rodadas serem
@@ -52,15 +54,13 @@ int verificarVencedorMao(int rodada1, int rodada2, int rodada3)
     else if (rodada2 == 2)
         vitoriasJogador2++;
 
-    if (rodada3 == 1)
-        vitoriasJogador1++;
-    else if (rodada3 == 2)
-        vitoriasJogador2++;
+    // Duas vitórias já encerram a mão, sem considerar a terceira rodada.
+    if (vitoriasJogador1 == 2)
+        return 1;
+    if (vitoriasJogador2 == 2)
+        return 2;
 
-    if (vitoriasJogador1 > vitoriasJogador2)
-        return 1; // Jogador 1 venceu a mão
-    else if (vitoriasJogador2 > vitoriasJogador1)
-        return 2; // Jogador 2 venceu a mão
+    // Conta a terceira rodada apenas uma vez.
     if (rodada3 == 1)
         vitoriasJogador1++;
     else if (rodada3 == 2)
@@ -72,24 +72,44 @@ int verificarVencedorMao(int rodada1, int rodada2, int rodada3)
     if (vitoriasJogador2 >= 2)
         return 2;
 
-    return 0; // Empata
+    return 0; // Ninguém chegou a duas vitórias nesta regra simplificada.
 }
 
-int pedirTruco(int valorMao)
+// Pergunta ao adversário se aceita. O valor da mão é tratado separadamente.
+int pedirTruco()
 {
     char resposta;
 
-    std::cout << "Truco!" << std::endl;
-    std::cout << "Deseja pedir truco? (s/n): ";
-    std::cin >> resposta;
+    while (true)
+    {
+        std::cout << "Jogador adversario aceita o aumento? (s/n): ";
+        if (!(std::cin >> resposta))
+            return 0; // Sem entrada disponível, não confirma o aumento.
 
-    if (resposta == 's' || resposta == 'S')
-    {
-        return 3; // Jogador pediu truco
+        if (resposta == 's' || resposta == 'S')
+            return 1;
+        if (resposta == 'n' || resposta == 'N')
+            return 0;
+
+        std::cout << "Resposta invalida. Digite s ou n." << std::endl;
     }
-    else
+}
+
+// Devolve o próximo valor; quem chama precisa guardar o resultado.
+int aumentarTruco(int valorMao)
+{
+    switch (valorMao)
     {
-        return valorMao; // Jogador não pediu truco
+    case 1:
+        return 3;
+    case 3:
+        return 6;
+    case 6:
+        return 9;
+    case 9:
+        return 12;
+    default:
+        return valorMao; // Em 12, não aumenta; outros valores são preservados.
     }
 }
 
@@ -113,7 +133,32 @@ int jogarRodada(Carta carta1, Carta carta2, Carta coringa)
         std::cout << "Empate na rodada!" << std::endl;
     }
 
-    return 0;
+    return vencedor;
+}
+
+// Chamar uma única vez ao encerrar a mão. As referências alteram o placar original.
+void atualizarPontuacao(int vencedorMao, int valorMao,
+                       int &pontosJogador1, int &pontosJogador2)
+{
+    if (valorMao <= 0)
+        return; // Uma mão precisa valer pontos positivos.
+
+    if (vencedorMao == 1)
+        pontosJogador1 += valorMao;
+    else if (vencedorMao == 2)
+        pontosJogador2 += valorMao;
+    // Sem vencedor (0), nenhum placar muda.
+}
+
+// Consultar após pontuar cada mão e encerrar a partida se retornar 1 ou 2.
+int verificarFimJogo(int pontosJogador1, int pontosJogador2)
+{
+    if (pontosJogador1 >= 12)
+        return 1;
+    if (pontosJogador2 >= 12)
+        return 2;
+
+    return 0; // A partida continua.
 }
 
 // cria e inicializa os dois jogadores, deixando as mãos vazias

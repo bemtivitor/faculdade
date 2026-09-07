@@ -1,0 +1,3 @@
+C:/Users/Guilherme/Code/univali/truco/build/CMakeFiles/truco.dir
+C:/Users/Guilherme/Code/univali/truco/build/CMakeFiles/edit_cache.dir
+C:/Users/Guilherme/Code/univali/truco/build/CMakeFiles/rebuild_cache.dir

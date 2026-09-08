@@ -18,27 +18,17 @@ int main()
 
     Jogo *jogo = new Jogo;
 
-    jogo->baralho = criarBaralho();
+    // mãos vazias e pontos zerados no início da partida
     jogo->jogadores = setarJogadores();
+    inicializarMonte(jogo->monte);
 
-    distribuirCartas(jogo->baralho, jogo->jogadores.data(),
-                     static_cast<int>(jogo->jogadores.size()));
+    // partida completa até alguém alcançar 12 pontos
+    int vencedor = jogarPartida(*jogo);
 
-    jogo->coringa = sortearCoringa(jogo->baralho);
+    std::cout << "\n############ FIM DE JOGO ############" << std::endl;
+    std::cout << "Jogador " << vencedor << " venceu a partida!" << std::endl;
 
-    // mostra as mãos para conferir que nenhuma carta se repete
-    for (int i = 0; i < 2; i++)
-    {
-        std::cout << "Jogador " << i + 1 << ": ";
-        for (int j = 0; j < 3; j++)
-        {
-            std::cout << mostrarCarta(jogo->jogadores[i].mao[j]) << "  ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "Carta coringa: " << mostrarCarta(jogo->coringa) << std::endl;
-    std::cout << "Cartas restantes no baralho: " << jogo->baralho.quantidade << std::endl;
-
+    limparMonte(jogo->monte);
     delete jogo;
 
     return 0;

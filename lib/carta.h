@@ -1,7 +1,7 @@
 #ifndef CARTA_H
 #define CARTA_H
 
-#include <string>
+#include "string"
 
 // naipes
 extern const int OURO;

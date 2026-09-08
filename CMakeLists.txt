@@ -11,6 +11,7 @@ add_executable(truco
     lib/carta.cpp
     lib/baralho.cpp
     lib/jogo.cpp
+    lib/monte.cpp
 )
 
 target_include_directories(truco PRIVATE lib)
